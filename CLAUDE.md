@@ -30,3 +30,4 @@ This started as a `create-next-app` scaffold and now has Clerk authentication wi
 - Run `npm run typecheck` and `npm test` before every commit, and never commit if either fails.
 - Never commit `.env`, secrets, or `node_modules`.
 - Keep the `Co-Authored-By: Claude` trailer on commits you write.
+- Try keep it one feature per commit.
