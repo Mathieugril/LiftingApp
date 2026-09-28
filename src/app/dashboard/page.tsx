@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { DumbbellIcon } from "lucide-react";
-import { getRecentWorkouts, getWorkoutsOnDate } from "@/db/queries/workouts";
+import { getRecentWorkouts, getWorkoutsOnDate } from "@/data/workouts";
 import { fromDateParam, parseDateParam, parseTimeZone } from "@/lib/dates";
 import { DatePicker } from "./_components/date-picker";
 import { WorkoutList } from "./_components/workout-list";

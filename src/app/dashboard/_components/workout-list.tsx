@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { WorkoutWithDetails } from "@/db/queries/workouts";
+import type { WorkoutWithDetails } from "@/data/workouts";
 import { WorkoutDetails } from "./workout-details";
 
 function workoutName(workout: WorkoutWithDetails) {

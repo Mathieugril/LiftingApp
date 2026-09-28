@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { WorkoutWithDetails } from "@/db/queries/workouts";
+import type { WorkoutWithDetails } from "@/data/workouts";
 
 type WorkoutSet = WorkoutWithDetails["workoutExercises"][number]["sets"][number];
 

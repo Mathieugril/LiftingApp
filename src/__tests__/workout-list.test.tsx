@@ -2,7 +2,7 @@ import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { WorkoutList } from "@/app/dashboard/_components/workout-list";
-import type { WorkoutWithDetails } from "@/db/queries/workouts";
+import type { WorkoutWithDetails } from "@/data/workouts";
 
 const createdAt = new Date("2026-09-22T09:00:00Z");
 
