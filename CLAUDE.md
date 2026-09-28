@@ -9,6 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Before starting any non-trivial task, ask clarifying questions until you are at least 95% confident you understand what's being asked and how to approach it. Don't guess at ambiguous requirements — surface the ambiguity and ask.
 - It's fine to proceed without asking on small, unambiguous tasks (e.g. a one-line typo fix) where there's effectively only one reasonable interpretation.
 - When working through a to-do list, run checks (typecheck/lint/tests/manual verification, as applicable) after completing each step, and don't move on to the next step until you're at least 95% confident the current one is correct.
+- All generated code must adhere to the relevant standards documents in `docs/` (e.g. `docs/ui.md` for anything UI-related). Read the applicable doc before writing code in that area, and follow it exactly — don't deviate without flagging the conflict to the user first.
 
 ## Project state
 
