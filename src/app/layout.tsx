@@ -6,6 +6,7 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -38,6 +39,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <SignUpButton mode="modal" />
             </Show>
             <Show when="signed-in">
+              <Link href="/dashboard" className="text-sm font-medium hover:underline">
+                Dashboard
+              </Link>
               <UserButton />
             </Show>
           </header>
