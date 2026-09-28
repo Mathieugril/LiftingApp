@@ -23,33 +23,36 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
     : "Track your training history.";
 
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-4 py-10">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-col gap-1.5">
-          <h1 className="text-3xl font-semibold tracking-tight">{heading}</h1>
-          <p className="text-sm text-muted-foreground">{subheading}</p>
-          {date && (
-            <Link
-              href="/dashboard"
-              className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-            >
-              ← Back to recent workouts
-            </Link>
-          )}
-        </div>
-        <DatePicker selected={date} />
+    <main className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-4 py-10">
+      <div className="flex flex-col gap-1.5">
+        <h1 className="text-3xl font-semibold tracking-tight">{heading}</h1>
+        <p className="text-sm text-muted-foreground">{subheading}</p>
+        {date && (
+          <Link
+            href="/dashboard"
+            className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+          >
+            ← Back to recent workouts
+          </Link>
+        )}
       </div>
 
-      {workouts.length > 0 ? (
-        <WorkoutList workouts={workouts} />
-      ) : (
-        <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed bg-muted/30 px-8 py-12 text-center">
-          <DumbbellIcon className="size-8 text-muted-foreground" />
-          <p className="text-muted-foreground">
-            {date ? "No workouts logged on this date." : "No workouts logged yet."}
-          </p>
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+        <div className="flex-1">
+          {workouts.length > 0 ? (
+            <WorkoutList workouts={workouts} />
+          ) : (
+            <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed bg-muted/30 px-8 py-12 text-center">
+              <DumbbellIcon className="size-8 text-muted-foreground" />
+              <p className="text-muted-foreground">
+                {date ? "No workouts logged on this date." : "No workouts logged yet."}
+              </p>
+            </div>
+          )}
         </div>
-      )}
+
+        <DatePicker selected={date} />
+      </div>
     </main>
   );
 }

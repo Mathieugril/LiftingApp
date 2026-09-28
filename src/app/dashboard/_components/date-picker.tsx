@@ -1,21 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { CalendarIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fromDateParam, toDateParam } from "@/lib/dates";
 
 export function DatePicker({ selected }: { selected: string | null }) {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
   const selectedDate = selected ? fromDateParam(selected) : undefined;
 
   function handleSelect(date: Date | undefined) {
     if (!date) return;
-    setOpen(false);
     const params = new URLSearchParams({
       date: toDateParam(date),
       tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -24,16 +19,11 @@ export function DatePicker({ selected }: { selected: string | null }) {
   }
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger render={<Button variant="outline" />}>
-        <CalendarIcon data-icon="inline-start" />
-        <span suppressHydrationWarning>
-          {selectedDate
-            ? selectedDate.toLocaleDateString(undefined, { dateStyle: "medium" })
-            : "Pick a date"}
-        </span>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="end">
+    <Card className="w-fit shrink-0">
+      <CardHeader>
+        <CardTitle>Calendar</CardTitle>
+      </CardHeader>
+      <CardContent>
         <Calendar
           mode="single"
           selected={selectedDate}
@@ -41,7 +31,7 @@ export function DatePicker({ selected }: { selected: string | null }) {
           onSelect={handleSelect}
           disabled={{ after: new Date() }}
         />
-      </PopoverContent>
-    </Popover>
+      </CardContent>
+    </Card>
   );
 }
