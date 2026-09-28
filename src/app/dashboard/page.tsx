@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { DumbbellIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { getRecentWorkouts, getWorkoutDates, getWorkoutsOnDate } from "@/data/workouts";
 import { fromDateParam, parseDateParam, parseTimeZone } from "@/lib/dates";
 import { DatePicker } from "./_components/date-picker";
@@ -26,17 +27,21 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
 
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-4 py-10">
-      <div className="flex flex-col gap-1.5">
-        <h1 className="text-3xl font-semibold tracking-tight">{heading}</h1>
-        <p className="text-sm text-muted-foreground">{subheading}</p>
-        {date && (
-          <Link
-            href="/dashboard"
-            className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-          >
-            ← Back to recent workouts
-          </Link>
-        )}
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col gap-1.5">
+          <h1 className="text-3xl font-semibold tracking-tight">{heading}</h1>
+          <p className="text-sm text-muted-foreground">{subheading}</p>
+          {date && (
+            <Link
+              href="/dashboard"
+              className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            >
+              ← Back to recent workouts
+            </Link>
+          )}
+        </div>
+
+        <Button render={<Link href="/dashboard/workout/new" />}>New workout</Button>
       </div>
 
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start">

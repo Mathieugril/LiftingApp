@@ -1,7 +1,7 @@
 import "server-only";
 import { and, eq, isNotNull, sql } from "drizzle-orm";
 import { db } from "@/db";
-import { workouts } from "@/db/schema";
+import { sets, workoutExercises, workouts } from "@/db/schema";
 
 const withDetails = {
   workoutExercises: {
@@ -44,6 +44,75 @@ export async function getWorkoutDates(userId: string, timeZone: string) {
     .from(workouts)
     .where(and(eq(workouts.userId, userId), isNotNull(workouts.performedAt)));
   return rows.map((row) => row.date);
+}
+
+type NewWorkoutSet = {
+  reps: number | null;
+  weight: string | null;
+  unit: "kg" | "lb";
+  rpe: string | null;
+  restSeconds: number;
+};
+
+type NewWorkoutExercise = {
+  exerciseId: string;
+  notes: string | null;
+  sets: NewWorkoutSet[];
+};
+
+type NewWorkout = {
+  name: string;
+  notes: string | null;
+  performedAt: Date;
+  exercises: NewWorkoutExercise[];
+};
+
+/**
+ * Inserts a workout with its exercises and sets. The neon-http driver doesn't support
+ * interactive transactions, so this runs as three sequential inserts (workout, then
+ * workoutExercises, then sets) rather than one atomic transaction — a failure between
+ * steps can leave a partial workout behind.
+ */
+export async function createWorkout(userId: string, input: NewWorkout) {
+  const [workout] = await db
+    .insert(workouts)
+    .values({
+      userId,
+      name: input.name,
+      notes: input.notes,
+      performedAt: input.performedAt,
+    })
+    .returning();
+
+  const insertedExercises = await db
+    .insert(workoutExercises)
+    .values(
+      input.exercises.map((exercise, index) => ({
+        workoutId: workout.id,
+        exerciseId: exercise.exerciseId,
+        order: index,
+        notes: exercise.notes,
+      })),
+    )
+    .returning();
+
+  const setRows = insertedExercises.flatMap((inserted, index) =>
+    input.exercises[index].sets.map((set, setIndex) => ({
+      workoutExerciseId: inserted.id,
+      order: setIndex,
+      reps: set.reps,
+      weight: set.weight,
+      unit: set.unit,
+      rpe: set.rpe,
+      restSeconds: set.restSeconds,
+    })),
+  );
+
+  if (setRows.length > 0) {
+    await db.insert(sets).values(setRows);
+  }
+
+  return workout;
 }
 
 export type WorkoutWithDetails = Awaited<ReturnType<typeof getRecentWorkouts>>[number];
