@@ -4,6 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 @AGENTS.md
 
+## Working with tasks
+
+- Before starting any non-trivial task, ask clarifying questions until you are at least 95% confident you understand what's being asked and how to approach it. Don't guess at ambiguous requirements — surface the ambiguity and ask.
+- It's fine to proceed without asking on small, unambiguous tasks (e.g. a one-line typo fix) where there's effectively only one reasonable interpretation.
+- When working through a to-do list, run checks (typecheck/lint/tests/manual verification, as applicable) after completing each step, and don't move on to the next step until you're at least 95% confident the current one is correct.
+
 ## Project state
 
 This started as a `create-next-app` scaffold and now has Clerk authentication wired in. Next.js 16.3.6 (App Router), React 19.2.8, TypeScript (strict), Tailwind CSS v4, ESLint 9, `@clerk/nextjs` for auth. No tests, no CI, no database.
