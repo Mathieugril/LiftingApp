@@ -1,5 +1,7 @@
 import "server-only";
+import { and, eq, isNotNull, sql } from "drizzle-orm";
 import { db } from "@/db";
+import { workouts } from "@/db/schema";
 
 const withDetails = {
   workoutExercises: {
@@ -31,6 +33,17 @@ export async function getWorkoutsOnDate(userId: string, date: string, timeZone: 
     orderBy: { performedAt: "desc" },
     with: withDetails,
   });
+}
+
+/** Every date (`YYYY-MM-DD`) with at least one performed workout, with the day interpreted in `timeZone`. */
+export async function getWorkoutDates(userId: string, timeZone: string) {
+  const rows = await db
+    .selectDistinct({
+      date: sql<string>`(${workouts.performedAt} AT TIME ZONE ${timeZone})::date`,
+    })
+    .from(workouts)
+    .where(and(eq(workouts.userId, userId), isNotNull(workouts.performedAt)));
+  return rows.map((row) => row.date);
 }
 
 export type WorkoutWithDetails = Awaited<ReturnType<typeof getRecentWorkouts>>[number];

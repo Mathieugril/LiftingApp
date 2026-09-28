@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { DumbbellIcon } from "lucide-react";
-import { getRecentWorkouts, getWorkoutsOnDate } from "@/data/workouts";
+import { getRecentWorkouts, getWorkoutDates, getWorkoutsOnDate } from "@/data/workouts";
 import { fromDateParam, parseDateParam, parseTimeZone } from "@/lib/dates";
 import { DatePicker } from "./_components/date-picker";
 import { WorkoutList } from "./_components/workout-list";
@@ -10,10 +10,12 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
   const { userId } = await auth.protect();
   const params = await searchParams;
   const date = parseDateParam(params.date);
+  const timeZone = parseTimeZone(params.tz);
 
-  const workouts = date
-    ? await getWorkoutsOnDate(userId, date, parseTimeZone(params.tz))
-    : await getRecentWorkouts(userId);
+  const [workouts, workoutDates] = await Promise.all([
+    date ? getWorkoutsOnDate(userId, date, timeZone) : getRecentWorkouts(userId),
+    getWorkoutDates(userId, timeZone),
+  ]);
 
   const heading = date
     ? `Workouts on ${fromDateParam(date).toLocaleDateString("en-US", { dateStyle: "long" })}`
@@ -51,7 +53,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
           )}
         </div>
 
-        <DatePicker selected={date} />
+        <DatePicker selected={date} workoutDates={workoutDates} />
       </div>
     </main>
   );
